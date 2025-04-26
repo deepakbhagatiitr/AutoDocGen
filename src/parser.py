@@ -4,8 +4,6 @@ from typing import List, Dict
 def parse_code(code: str) -> Dict:
     """
     Parse a Python codebase to extract API metadata (endpoints, methods, parameters).
-    Placeholder for GenAI (e.g., Grok 3) integration.
-    
     Args:
         code (str): Source code of the FastAPI app.
     
@@ -16,26 +14,41 @@ def parse_code(code: str) -> Dict:
         tree = ast.parse(code)
         endpoints = []
 
+        # Walk through the AST to find function definitions
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
+                print(f"Function: {node.name}")  # Debug: Print function name
+
                 for decorator in node.decorator_list:
+                    print(f"  Decorator: {ast.dump(decorator)}")  # Debug: Print decorator details
+
+                    # Handle decorators like @app.get, @app.post, etc.
                     if isinstance(decorator, ast.Call):
-                        # Check for FastAPI route decorators (e.g., @app.get, @app.post)
+                        # We are looking for method like 'get', 'post', etc.
                         if isinstance(decorator.func, ast.Attribute):
-                            method = decorator.func.attr  # e.g., 'get', 'post'
+                            method = decorator.func.attr.lower()  # e.g., 'get', 'post'
                             path = None
+
+                            # Check if decorator has 'path' as a keyword argument
                             for kw in decorator.keywords:
-                                if kw.arg == 'path':
-                                    path = kw.value.s if isinstance(kw.value, ast.Str) else None
+                                if kw.arg == 'path' and isinstance(kw.value, ast.Constant):
+                                    path = kw.value.value
+
+                            # Handle decorators that have path as an argument (e.g., @app.get("/users"))
+                            if not path and isinstance(decorator.args[0], ast.Constant):
+                                path = decorator.args[0].value
+
                             if path and method in ['get', 'post', 'put', 'delete']:
-                                params = [arg.arg for arg in node.args.args]
+                                # Extract parameters from function arguments
+                                params = [arg.arg for arg in node.args.args if not arg.arg.startswith('__')]
+                                print(f"  Endpoint: {method.upper()} {path} -> Params: {params}")  # Debug
                                 endpoints.append({
                                     'path': path,
                                     'method': method.upper(),
                                     'parameters': params
                                 })
 
-        return {'endpoints': endpoints}
+        return {'endpoints': endpoints} if endpoints else {'endpoints': []}
     except Exception as e:
         return {'error': f'Parsing failed: {str(e)}'}
 
@@ -45,11 +58,11 @@ if __name__ == "__main__":
 from fastapi import FastAPI
 app = FastAPI()
 
-@app.get(path="/users")
+@app.get("/users")
 async def list_users():
     return {"users": []}
 
-@app.post(path="/items")
+@app.post("/items")
 async def create_item(item_id: int):
     return {"item_id": item_id}
 """

@@ -45,5 +45,3 @@ async def generate_docs(file: UploadFile = File(...)):
         }
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"Failed to generate documentation: {str(e)}"})
-
-# Run with: uvicorn src.api:app --reload

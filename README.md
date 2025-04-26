@@ -53,7 +53,7 @@ AutoDocGen/
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/APIInnovators/AutoDocGen.git
+   git clone https://github.com/deepakbhagatiitr/AutoDocGen.git
    cd AutoDocGen
    ```
 

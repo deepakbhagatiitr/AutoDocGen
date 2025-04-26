@@ -50,20 +50,3 @@ def generate_markdown(metadata: Dict) -> str:
         markdown += f"- **Description**: {endpoint['method']} endpoint for {endpoint['path']}\n"
         markdown += f"- **Parameters**: {', '.join(endpoint.get('parameters', [])) or 'None'}\n"
         markdown += f"- **Responses**: 200 {'Created' if endpoint['method'] == 'POST' else 'OK'}\n\n"
-    return markdown
-
-# Example usage (for testing)
-if __name__ == "__main__":
-    sample_metadata = {
-        'endpoints': [
-            {'path': '/users', 'method': 'GET', 'parameters': []},
-            {'path': '/items', 'method': 'POST', 'parameters': ['item_id']}
-        ]
-    }
-    openapi_json = generate_openapi(sample_metadata)
-    markdown_docs = generate_markdown(sample_metadata)
-    with open("openapi.json", "w") as f:
-        f.write(openapi_json)
-    with open("docs.md", "w") as f:
-        f.write(markdown_docs)
-    print("Generated openapi.json and docs.md")
