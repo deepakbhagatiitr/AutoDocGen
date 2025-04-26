@@ -201,14 +201,6 @@ This executes:
 
 For additional help, refer to the FastAPI documentation (https://fastapi.tiangolo.com/) or contact the API Innovators group.
 
-## Contributing
-
-This is a student project for COT6930. Contributions are not expected, but feedback is welcome via the repository’s **Issues** section.
-
 ## License
 
 This project is for educational purposes and does not include a formal license.
-
-## Contact
-
-For questions, contact the **API Innovators** group via the COT6930 course platform or GitHub Issues.
