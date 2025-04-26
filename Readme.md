@@ -1,6 +1,6 @@
 # AutoDocGen – Automated Documentation Generator for APIs
 
-This repository contains the experimental prototype for **AutoDocGen**, a tool that automatically generates API documentation from Python codebases (e.g., FastAPI). It is part of the **COT6930 – Generative AI and Software Development Lifecycles** final project by the **API Innovators** group.
+This repository contains the experimental prototype for **AutoDocGen**, a tool that automatically generates API documentation from Python codebases (e.g., FastAPI).
 
 ## Overview
 
